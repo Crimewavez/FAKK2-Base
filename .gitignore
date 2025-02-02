@@ -1,0 +1,67 @@
+# Visual Studio-specific files
+.vscode/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build directories
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+*.vcxproj.user
+*.vcxproj.filters
+*.VC.opendb
+*.VC.db
+*.ipch
+*.ncb
+*.log
+*.tlog
+*.obj
+*.pch
+*.idb
+*.ilk
+*.pdb
+*.exp
+*.lib
+
+# CMake & Ninja build files
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles/
+ninja.log
+rules.ninja
+
+# NuGet packages
+*.nupkg
+packages/
+project.lock.json
+
+# Rider & JetBrains files
+.idea/
+*.sln.iml
+
+# Debugging files
+*.tlog
+*.dmp
+*.iobj
+*.ipdb
+
+# Auto-generated files
+GeneratedFiles/
+*.gch
+*.rsp
+
+# Crash reports & temp files
+hs_err_pid*
+*.tmp
+*.cache
+*.bak
+*.swp
+*.swo
+
+# Ignore logs
+*.log
+*.tlog
+
