@@ -958,7 +958,7 @@ void EventArgDef::Setup
       while( 1 )
          {
          // find opening '['
-         tokptr = strchr( ptr, '[' );
+         tokptr = (char*)strchr( ptr, '[' );
          if ( !tokptr )
             {
             break;
@@ -2120,6 +2120,7 @@ Event::Event
 
 	{
    str *t;
+   Event* event = this;
 
 	if ( !commandList )
 		{
@@ -2177,7 +2178,7 @@ Event::Event
    // suppress it if it starts with '_'
 	if ( documentation && ( command[ 0 ] != '_' ) )
       {
-		eventDefList->AddObject( ( Event * )this );
+		eventDefList->AddObject(event);
       }
    else
       {
@@ -2574,8 +2575,8 @@ void Event::Archive
 
 CLASS_DECLARATION( Class, Listener, NULL )
 	{
-	   { &EV_Remove,				Listener::Remove },
-		{ &EV_ScriptRemove,		Listener::ScriptRemove },
+	   { &EV_Remove,				&Listener::Remove },
+		{ &EV_ScriptRemove,		&Listener::ScriptRemove },
 		{ NULL, NULL }
 	};
 

@@ -70,6 +70,9 @@
 
 #ifndef __CLASS_H__
 #define __CLASS_H__
+#pragma message("class.h was included")
+
+
 
 #if defined( GAME_DLL )
 //
@@ -164,11 +167,12 @@ class SafePtrBase
    private:
 		void	AddReference( Class *ptr );
 		void	RemoveReference( Class *ptr );
+		
 
 	protected:
 		SafePtrBase *prevSafePtr;
 		SafePtrBase *nextSafePtr;
-		Class       *ptr;
+		//Class       *ptr;							//FIXME: Crimewavez: problem with access issues, public for now. Consider changing external access to Get() and Set() methods instead
 
 	public:
                   SafePtrBase();
@@ -176,6 +180,7 @@ class SafePtrBase
 		void	      InitSafePtr( Class *newptr );
       Class       *Pointer( void );
       void	      Clear( void );
+	  Class       *ptr;
 	};
 
 /***********************************************************************
@@ -287,36 +292,36 @@ inline qboolean Class::isInheritedBy
 
 inline void SafePtrBase::AddReference
 	(
-	Class *ptr
+	Class *target
 	)
 
 	{
-	if ( !ptr->SafePtrList )
+	if ( !target->SafePtrList )
 		{
-		ptr->SafePtrList = this;
+		target->SafePtrList = this;
 		LL_Reset( this, nextSafePtr, prevSafePtr );
 		}
 	else
 		{
-		LL_Add( ptr->SafePtrList, this, nextSafePtr, prevSafePtr );
+		LL_Add(target->SafePtrList, this, nextSafePtr, prevSafePtr );
 		}
 	}
 
 inline void SafePtrBase::RemoveReference
 	(
-	Class *ptr
+	Class *target
 	)
 
 	{
-	if ( ptr->SafePtrList == this )
+	if (target->SafePtrList == this )
 		{
-		if ( ptr->SafePtrList->nextSafePtr == this )
+		if (target->SafePtrList->nextSafePtr == this )
 			{
-			ptr->SafePtrList = NULL;
+			target->SafePtrList = NULL;
 			}
 		else
 			{
-			ptr->SafePtrList = nextSafePtr;
+			target->SafePtrList = nextSafePtr;
 			LL_Remove( this, nextSafePtr, prevSafePtr );
 			}
 		}
@@ -393,10 +398,25 @@ class SafePtr : public SafePtrBase
 		SafePtr& operator=( const SafePtr& obj );
 		SafePtr& operator=( T * const obj );
 
-		friend int operator==( SafePtr<T> a, T *b );
-		friend int operator!=( SafePtr<T> a, T *b );
-		friend int operator==( T *a, SafePtr<T> b );
-		friend int operator!=( T *a, SafePtr<T> b );
+		//friend int operator==( SafePtr<T> a, T *b );
+		//friend int operator!=( SafePtr<T> a, T *b );
+		//friend int operator==( T *a, SafePtr<T> b );
+		//     friend inline int operator==(SafePtr<T> a, T* b) {
+		//return a.ptr == b;
+
+
+	friend inline int operator!=(SafePtr<T> a, T* b) {
+		return !(a == b);
+	}
+	
+	friend inline int operator==(T* a, SafePtr<T> b) {
+		return a == b.ptr;
+	}
+
+	friend inline int operator!=(T* a, SafePtr<T> b) {
+		return !(a == b);
+	}
+		//friend int operator!=( T *a, SafePtr<T> b );
 
       operator	T*() const;
 		T* operator->() const;
